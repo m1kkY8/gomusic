@@ -1,17 +1,15 @@
 package main 
 
 import (
-	"bufio"
-	"encoding/json"
-	_ "encoding/json"
-	"fmt"
-	"io"
-	"log"
-	"net/http"
-	_ "net/http"
-	"os"
-	"os/exec"
+    "bufio"
+    "io"
+    "fmt"
+    "log"
+    "os"
+    "os/exec"
+    "net/http"
 	"strings"
+    "encoding/json"
 )
 
 type Video struct {
@@ -24,8 +22,6 @@ func download(urls []string) {
         args := []string{
             "--no-write-description",
             "-q",
-            "--progress",
-            "--newline",
             "--no-playlist",
             "--extract-audio",
             "--add-metadata",
@@ -53,6 +49,7 @@ func main() {
     url := "http://localhost:3001/search?q="
 
     for {
+        fmt.Printf("Enter song: ")
         reader := bufio.NewReader(os.Stdin)
         line, err := reader.ReadString('\n')
         if err != nil {
