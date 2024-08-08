@@ -1,15 +1,16 @@
-package main 
+package main
 
 import (
-    "bufio"
-    "io"
-    "fmt"
-    "log"
-    "os"
-    "os/exec"
-    "net/http"
+	"bufio"
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
 	"strings"
-    "encoding/json"
+
+	"github.com/m1kkY8/gomusic/utils"
 )
 
 type Video struct {
@@ -17,36 +18,21 @@ type Video struct {
     Title string `json:"title"`
 }
 
-func download(urls []string) {
-    for _ , url := range urls {
-        args := []string{
-            "--no-write-description",
-            "-q",
-            "--no-playlist",
-            "--extract-audio",
-            "--add-metadata",
-            "--audio-format", "mp3",
-            "--audio-quality", "0",
-            url,
-        }
-
-        cmd := exec.Command("yt-dlp", args...)
-
-        cmd.Stdout = os.Stdout
-        cmd.Stderr = os.Stderr
-
-        err := cmd.Run()
-        if err != nil {
-            log.Print("error downloading")
-        }
-    }
-}
-
 func main() {
     
     var searchQuery string
     var urls[] string 
     url := "http://localhost:3001/search?q="
+    
+    if !utils.CheckDependencies(){
+        fmt.Println("yt-dlp is not installed")
+        return
+    }
+
+    if !utils.IsServerRunning() {
+        fmt.Println("Server is not running")
+        return
+    }
 
     for {
         fmt.Printf("Enter song: ")
@@ -85,5 +71,5 @@ func main() {
         urls = append(urls, video.Url)
     }
     
-    download(urls)
+    utils.Downloader(urls)
 }
