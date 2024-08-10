@@ -70,6 +70,6 @@ func main() {
 
         urls = append(urls, video.Url)
     }
-    // FIX: try to replace server with yt-dlp    
+
     utils.Downloader(urls)
 }
